@@ -1,0 +1,238 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+use ieee.std_logic_unsigned.all;
+
+entity Processador10Bits is
+	port(
+		numeros : in std_logic_vector(0 to 9);
+		clock : in std_logic;
+		clock2 : in std_logic;
+		led : out std_logic_vector(0 to 4);
+		display : out std_logic_vector(0 to 6)
+	);
+end entity Processador10Bits;
+
+architecture Processador of Processador10Bits is
+
+		
+		signal num        : std_logic_vector (0 to 4);
+		signal op         : std_logic_vector (0 to 4);
+		signal numero1    : std_logic_vector (0 to 4);
+		signal numero2    : std_logic_vector (0 to 4);
+		signal move       : std_logic_vector (0 to 4);
+		signal resultado  : std_logic_vector (0 to 4);
+		signal resultado2 : boolean;
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+		type MEMORIA is array ( 0 to 31 ) of std_logic_vector (0 to 4);
+	signal MEM : MEMORIA := (
+
+	"00000", "00001", "00010", "00011",
+	"00100", "00101", "00110", "00111",
+	"01000", "01001", "01010", "01011",
+	"01100", "01101", "01110", "01111",
+	"10000", "10001", "10010", "10011",
+	"10100", "10101", "10110", "10111",
+	"11000", "11001", "11010", "11011",
+	"11100", "11101", "11110", "11111"
+);
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	begin
+			process(numeros,clock,clock2) is
+	begin
+
+num <= numeros(0 to 4);  op  <= numeros(5 to 9);
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		
+		if (clock = '0') then
+			case (num) is
+				when "00000" => numero1 <= MEM(0);
+				when "00001" => numero1 <= MEM(1);
+				when "00010" => numero1 <= MEM(2);
+				when "00011" => numero1 <= MEM(3);
+				when "00100" => numero1 <= MEM(4);
+				when "00101" => numero1 <= MEM(5);
+				when "00110" => numero1 <= MEM(6);
+				when "00111" => numero1 <= MEM(7);
+				when "01000" => numero1 <= MEM(8);
+				when "01001" => numero1 <= MEM(9);
+				when "01010" => numero1 <= MEM(10);
+				when "01011" => numero1 <= MEM(11);
+				when "01100" => numero1 <= MEM(12);
+				when "01101" => numero1 <= MEM(13);
+				when "01110" => numero1 <= MEM(14);
+				when "01111" => numero1 <= MEM(15);
+				when "10000" => numero1 <= MEM(16);
+				when "10001" => numero1 <= MEM(17);
+				when "10010" => numero1 <= MEM(18);
+				when "10011" => numero1 <= MEM(19);
+				when "10100" => numero1 <= MEM(20);
+				when "10101" => numero1 <= MEM(21);
+				when "10110" => numero1 <= MEM(22);
+				when "10111" => numero1 <= MEM(23);
+				when "11000" => numero1 <= MEM(24);
+				when "11001" => numero1 <= MEM(25);
+				when "11010" => numero1 <= MEM(26);
+				when "11011" => numero1 <= MEM(27);
+				when "11100" => numero1 <= MEM(28);
+				when "11101" => numero1 <= MEM(29);
+				when "11110" => numero1 <= MEM(30);
+				when "11111" => numero1 <= MEM(31);
+				when OTHERS => NULL;
+			end case;
+		end if;
+		
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	if (clock2 = '0') then
+		case (num) is
+			when "00000" => numero2 <= MEM(0);
+			when "00001" => numero2 <= MEM(1);
+			when "00010" => numero2 <= MEM(2);
+			when "00011" => numero2 <= MEM(3);
+			when "00100" => numero2 <= MEM(4);
+			when "00101" => numero2 <= MEM(5);
+			when "00110" => numero2 <= MEM(6);
+			when "00111" => numero2 <= MEM(7);
+			when "01000" => numero2 <= MEM(8);
+			when "01001" => numero2 <= MEM(9);
+			when "01010" => numero2 <= MEM(10);
+			when "01011" => numero2 <= MEM(11);
+			when "01100" => numero2 <= MEM(12);
+			when "01101" => numero2 <= MEM(13);
+			when "01110" => numero2 <= MEM(14);
+			when "01111" => numero2 <= MEM(15);
+			when "10000" => numero2 <= MEM(16);
+			when "10001" => numero2 <= MEM(17);
+			when "10010" => numero2 <= MEM(18);
+			when "10011" => numero2 <= MEM(19);
+			when "10100" => numero2 <= MEM(20);
+			when "10101" => numero2 <= MEM(21);
+			when "10110" => numero2 <= MEM(22);
+			when "10111" => numero2 <= MEM(23);
+			when "11000" => numero2 <= MEM(24);
+			when "11001" => numero2 <= MEM(25);
+			when "11010" => numero2 <= MEM(26);
+			when "11011" => numero2 <= MEM(27);
+			when "11100" => numero2 <= MEM(28);
+			when "11101" => numero2 <= MEM(29);
+			when "11110" => numero2 <= MEM(30);
+			when "11111" => numero2 <= MEM(31);
+			when OTHERS => NULL;
+
+		end case;
+	end if;
+end process;
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+process(clock,clock2) is
+	begin
+	
+		if clock = '0' AND clock2 = '0' then
+			numero1 <= NULL;
+			numero2 <= NULL;
+			
+		end if;
+	end process;
+	
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+process(op) is
+	begin
+		case op is
+
+			when "00001" => resultado <= numero1 + numero2;
+			when "00010" => resultado <= numero1 - numero2;
+			when "00011" => resultado <= std_logic_vector(to_unsigned(to_integer(unsigned(numero1)) * to_integer(unsigned(numero2)), 5));
+			when "00100" => resultado <= std_logic_vector(to_unsigned(to_integer(unsigned(numero1)) / to_integer(unsigned(numero2)), 5));
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------		
+			when "00101" => r2 <= numero1 > numero2;
+				if(numero1 > numero2) then 
+					display <= "0011001";
+				else
+					display <= "0000000";
+				end if;
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+			when "00110" => resultado2 <= numero1 < numero2;
+				if(numero1 < numero2) then 
+					display <= "0001101";
+				else
+					display <= "1111111";
+				end if;
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+			when "00111" => resultado2 <= numero1 >= numero2;
+				if(numero1 >= numero2) then 
+					display <= "1011001";
+				else
+					display <= "1111111";
+				end if;
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+			when "01000" => resultado2 <= numero1 <= numero2;
+				if(numero1 <= numero2) then 
+					display <= "0001101";
+				else
+					display <= "1111111";
+				end if;
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+			when "01001" => resultado2 <= numero1 /= numero2;
+				if(numero1 /= numero2) then 
+					display <= "0000111";
+				else
+					display <= "1111111";
+				end if;
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+			when "01010" => move <= numero1;
+				display <= "0110010";
+			when OTHERS => NULL;
+		end case;
+end process;
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+process(resultado) is
+	begin
+		case resultado is
+
+				 when "00000" => led  <= "00000"; --'0'
+				 when "00001" => led  <= "00001"; --'1'
+				 when "00010" => led  <= "00010"; --'2'
+				 when "00011" => led  <= "00011"; --'3'
+				 when "00100" => led  <= "00100"; --'4'
+				 when "00101" => led  <= "00101"; --'5'
+				 when "00110" => led  <= "00110"; --'6'
+				 when "00111" => led  <= "00111"; --'7'
+				 when "01000" => led  <= "01000"; --'8'
+				 when "01001" => led  <= "01001"; --'9'
+				 when "01010" => led  <= "01010"; --'10'
+				 when "01011" => led  <= "01011"; --'11'
+				 when "01100" => led  <= "01100"; --'12'
+				 when "01101" => led  <= "01101"; --'13'
+				 when "01110" => led  <= "01110"; --'14'
+				 when "01111" => led  <= "01111"; --'15'
+				 when "10000" => led  <= "10000"; --'16'
+				 when "10001" => led  <= "10001"; --'17'
+				 when "10010" => led  <= "10010"; --'18'
+				 when "10011" => led  <= "10011"; --'19'
+				 when "10100" => led  <= "10100"; --'20'
+				 when "10101" => led  <= "10101"; --'21'
+				 when "10110" => led  <= "10110"; --'22'
+				 when "10111" => led  <= "10111"; --'23'
+				 when "11000" => led  <= "11000"; --'24'
+				 when "11001" => led  <= "11001"; --'25'
+				 when "11010" => led  <= "11010"; --'26'
+				 when "11011" => led  <= "11011"; --'27'
+				 when "11100" => led  <= "11100"; --'28'
+				 when "11101" => led  <= "11101"; --'29'
+				 when "11110" => led  <= "11110"; --'30'
+				 when "11111" => led  <= "11111"; --'31'
+
+				 when others => led <= "11111";
+			end case;
+	end process;
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+end architecture;
